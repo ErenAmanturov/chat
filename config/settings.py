@@ -20,8 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # INSTALLED APPS
-    'user',
-    'chat'
+    'apps.user',
+    'apps.chat'
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
