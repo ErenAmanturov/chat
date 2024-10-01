@@ -1,16 +1,16 @@
 from pathlib import Path
-
+from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-SECRET_KEY = 'django-insecure-#kqx3$$0xlojv+uyy1o*9@-i7gy#ox@1wa7@p2o^sn2l^%n=b%'
+SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = True
+DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = []
 
-
+AUTH_USER_MODEL = 'user.User'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,10 +19,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     # INSTALLED APPS
     'apps.user',
-    'apps.chat'
+    'apps.chat',
+
+    # DIFFERENT APPS 
+    'rest_framework',
+    'phonenumber_field',
 ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
