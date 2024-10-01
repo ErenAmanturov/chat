@@ -1,17 +1,17 @@
 from django.contrib import admin
-from .models import User, Group, GroupMembers     
+from .models import User, ChatGroup, ChatGroupMembers     
 
 # Register your models here.
-@admin.register(Group)
+@admin.register(ChatGroup)
 class GroupAdmin(admin.ModelAdmin):
     list_diplay = ['name', 'creator', 'description']
     search_fields = ['name', 'creator__username']
 
 
-@admin.register(GroupMembers)
+@admin.register(ChatGroupMembers)
 class GroupMemberAdmin(admin.ModelAdmin):
-    list_display = ['group', 'user', 'role']
-    search_fields = ['group__name', 'user__username']
+    list_display = ['group', 'members', 'role']
+    search_fields = ['group__name', 'members__username']
     list_filter = ['role']
 
 

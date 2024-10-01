@@ -26,7 +26,7 @@ class Manager(BaseUserManager):
 
 class User(AbstractUser):
     username = models.CharField(max_length=50, unique=True)
-    phone_number = PhoneNumberField(region='KG')
+    phone_number = PhoneNumberField(region='KG', unique=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     is_staff = models.BooleanField(default=False)
@@ -45,8 +45,7 @@ class User(AbstractUser):
         verbose_name_plural = "Пользователи"
 
 
-class Group(Group):
-    name = models.CharField(max_length=30)
+class ChatGroup(Group):
     description = models.TextField()
     creator = models.OneToOneField(User, on_delete=models.CASCADE)
     group_picture = models.ForeignKey(Image, on_delete=models.CASCADE)
@@ -55,15 +54,15 @@ class Group(Group):
         return self.name
 
 
-class GroupMembers(models.Model):
+class ChatGroupMembers(models.Model):
     ROLE_CHOICES = [
         ('admin', 'Administrator'),
         ('moderator', 'Moderator'),
         ('member', 'Member'),
     ]
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
-    members = models.ManyToManyField(User)
+    members = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.user.username} in {self.group.name} as {self.role}"
