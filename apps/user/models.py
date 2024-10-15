@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -24,13 +24,10 @@ class Manager(BaseUserManager):
 
         return self.create_user(phone_number, password, **extra_fields)
 
+
 class User(AbstractUser):
-    username = models.CharField(max_length=50, unique=True)
+    username = models.CharField(max_length=10)
     phone_number = PhoneNumberField(region='KG', unique=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
 
     objects = Manager()
 
@@ -44,29 +41,3 @@ class User(AbstractUser):
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
 
-
-class ChatGroup(Group):
-    description = models.TextField()
-    creator = models.OneToOneField(User, on_delete=models.CASCADE)
-    group_picture = models.ForeignKey(Image, on_delete=models.CASCADE)
-
-    def __str__(self) -> str:
-        return self.name
-
-
-class ChatGroupMembers(models.Model):
-    ROLE_CHOICES = [
-        ('admin', 'Administrator'),
-        ('moderator', 'Moderator'),
-        ('member', 'Member'),
-    ]
-    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
-    members = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.user.username} in {self.group.name} as {self.role}"
-
-    class Meta:
-        verbose_name = 'Группы'
-        verbose_name_plural = 'Группы'
